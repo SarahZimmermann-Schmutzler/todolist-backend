@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework.authtoken.views import ObtainAuthToken, APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import TodoItem
 from todolist.serializers import TodoItemSerializer
@@ -22,8 +24,9 @@ class LoginView(ObtainAuthToken):
         })
 
 class TodoItemView(APIView):
-    # authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    # sendet Token mit
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         """
