@@ -23,15 +23,16 @@ class LoginView(ObtainAuthToken):
             'email': user.email
         })
 
+
 class TodoItemView(APIView):
     authentication_classes = [TokenAuthentication]
-    # sendet Token mit
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         """
         Return a list of all todos.
         """
-        todos = TodoItem.objects.all()
+        todos = TodoItem.objects.filter(author=request.user)
+        # sollen nur die Todos des Users angezeigt werden
         serializer = TodoItemSerializer(todos, many=True)
         return Response(serializer.data)
